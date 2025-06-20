@@ -105,7 +105,7 @@ void menu() {
     cout << "7. Calcular Rota\n";
     cout << "8. Backup de Dados\n";
     cout << "9. Restaurar Dados\n";
-    cout << "0. Sair\n";
+   
 }
 
 
