@@ -44,8 +44,8 @@ class Veiculo {
     const char* getmodelo() const{
         return modelo;
     }
-    int getano () const{
-        return ano;
+    int getcarga () const{
+        return carga;
     }
     int getlocalAtual() const{
         return indiceLocalAtual;
@@ -75,12 +75,12 @@ void menu();
 
 int main() {
     setlocale(LC_ALL, "pt_BR.UTF-8");
-
+    Veiculo v;
     int opcao;
 
     do {
         menu();
-        cout << "Escolha uma opção: ";
+        cout << "Escolha uma opcao: ";
         cin >> opcao;
 
         switch (opcao) {
@@ -92,9 +92,47 @@ int main() {
                 break;
             case 3:
                 // cadastrarVeiculo();
-                break;
-            case 4:
+                if (qtdVeiculos < MAX_VEICULOS) {
+                    Veiculo v;
+                    char placa[20];
+                    char modelo[50];
+                    int carga;
+
+                    cout << "Digite a placa do veiculo: ";
+                    cin.ignore(); // para limpar o buffer antes de getline
+                    cin.getline(placa, sizeof(placa));
+
+                    cout << "Digite o modelo do veiculo: ";
+                    cin.getline(modelo, sizeof(modelo));
+
+                    cout << "Digite a carga do veiculo: ";
+                    cin >> carga;
+
+                    v.setplaca(placa);
+                    v.setmodelo(modelo);
+                    v.setcarga(carga);
+
+                    veiculos[qtdVeiculos++] = v;
+                    cout << "Veiculo cadastrado com sucesso!\n";
+                    break;
+             
+                } else {
+                    cout << "Limite de veiculos atingido.\n";
+                    break;
+                }
+                
+            
+              
+           case 4:
                 // listarVeiculos();
+                    
+                cout << "Mosntrando veiculos cadastrados" << "\n";
+                for(int i=0; i<qtdVeiculos;i++){
+                cout << "Placa: " << veiculos[i].getplaca() << "\n";
+                cout << "Modelo: " << veiculos[i].getmodelo() << "\n";
+                cout << "Carga: " << veiculos[i].getcarga() << "\n";
+                cout << "--------------------------------------------------------------------" << "\n";
+                }
                 break;
             case 5:
                 // cadastrarPedido();
@@ -115,7 +153,7 @@ int main() {
                 cout << "Saindo...\n";
                 break;
             default:
-                cout << "Opção inválida.\n";
+                cout << "Opcao invalida.\n";
         }
 
     } while (opcao != 0);
@@ -128,7 +166,7 @@ void menu() {
     cout << "1. Cadastrar Local\n";
     cout << "2. Listar Locais\n";
     cout << "3. Cadastrar Veiculo\n";
-    cout << "4. Listar Veículos\n";
+    cout << "4. Listar Veiculos\n";
     cout << "5. Cadastrar Pedido\n";
     cout << "6. Listar Pedidos\n";
     cout << "7. Calcular Rota\n";
