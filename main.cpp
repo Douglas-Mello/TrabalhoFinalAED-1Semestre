@@ -6,26 +6,20 @@
 using namespace std;
 
 // Constantes
-#define MAX_LOCAIS 100
+//#define MAX_LOCAIS 100
 #define MAX_VEICULOS 100
 #define MAX_PEDIDOS 100
 
 // Structs básicas
-
-struct Local {
-    char nome[100];
-    float x, y;
-};
-
 class Veiculo {
     private:
         char placa[10];
         char modelo[50];
-        int status; // 0 = disponível, 1 = ocupado
+        int carga; 
         int indiceLocalAtual;
     public:
         Veiculo() {
-            status = 0;
+            carga = 0;
             placa[0] = '\0';
             modelo[0] = '\0';
             indiceLocalAtual = -1;
@@ -39,12 +33,22 @@ class Veiculo {
         strncpy(modelo, m, sizeof(modelo));
         modelo[sizeof(modelo) - 1] = '\0';
     }
+    void setcarga(const int c){
+        carga = c;
+    }
+    
     // Método para exibir os dados (só pra teste)
-    void exibirDados() {
-        cout << "Placa: " << placa << endl;
-        cout << "Modelo: " << modelo << endl;
-        cout << "Status: " << (status == 0 ? "Disponível" : "Ocupado") << endl;
-        cout << "Índice Local Atual: " << indiceLocalAtual << endl;
+    const char* getplaca() const{
+        return placa;
+    }
+    const char* getmodelo() const{
+        return modelo;
+    }
+    int getano () const{
+        return ano;
+    }
+    int getlocalAtual() const{
+        return indiceLocalAtual;
     }
 };
 
@@ -57,8 +61,8 @@ struct Pedido {
 };
 
 // Vetores globais
-Local locais[MAX_LOCAIS];
-int qtdLocais = 0;
+/*Local locais[MAX_LOCAIS];
+int qtdLocais = 0;*/
 
 Veiculo veiculos[MAX_VEICULOS];
 int qtdVeiculos = 0;
@@ -120,10 +124,10 @@ int main() {
 }
 
 void menu() {
-    cout << "\n====== Sistema de Logística de Entrega (SLEM) ======\n";
+    cout << "\n====== Sistema de Logistica de Entrega (SLEM) ======\n";
     cout << "1. Cadastrar Local\n";
     cout << "2. Listar Locais\n";
-    cout << "3. Cadastrar Veículo\n";
+    cout << "3. Cadastrar Veiculo\n";
     cout << "4. Listar Veículos\n";
     cout << "5. Cadastrar Pedido\n";
     cout << "6. Listar Pedidos\n";
