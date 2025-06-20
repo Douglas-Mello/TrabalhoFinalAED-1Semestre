@@ -17,12 +17,37 @@ struct Local {
     float x, y;
 };
 
-struct Veiculo {
-    char placa[10];
-    char modelo[50];
-    int status; // 0 = disponível, 1 = ocupado
-    int indiceLocalAtual;
+class Veiculo {
+    private:
+        char placa[10];
+        char modelo[50];
+        int status; // 0 = disponível, 1 = ocupado
+        int indiceLocalAtual;
+    public:
+        Veiculo() {
+            status = 0;
+            placa[0] = '\0';
+            modelo[0] = '\0';
+            indiceLocalAtual = -1;
+        }
+    void setplaca(const char p[]){
+         strncpy(placa, p, sizeof(placa));
+          placa[sizeof(placa) - 1] = '\0'; // Garante q a ultima casa seja um \0, fim de string
+
+    }
+    void setmodelo(const char m[]){
+        strncpy(modelo, m, sizeof(modelo));
+        modelo[sizeof(modelo) - 1] = '\0';
+    }
+    // Método para exibir os dados (só pra teste)
+    void exibirDados() {
+        cout << "Placa: " << placa << endl;
+        cout << "Modelo: " << modelo << endl;
+        cout << "Status: " << (status == 0 ? "Disponível" : "Ocupado") << endl;
+        cout << "Índice Local Atual: " << indiceLocalAtual << endl;
+    }
 };
+
 
 struct Pedido {
     int id;
