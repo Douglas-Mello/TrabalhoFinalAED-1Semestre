@@ -1,8 +1,9 @@
 #include <iostream>
 #include <cstring>
 #include <cstdlib>
-#include <locale.h>
+#include <algorithm>
 #include <math.h>
+#include <vector>
 using namespace std;
 
 // Constantes
@@ -116,6 +117,7 @@ public:
         sety(y);
         setcargap(c);
     }
+    
 
     void setcodigo(int c) {
         codigo = c;
@@ -133,13 +135,6 @@ public:
         return cargap;
     }
 };
-float calcularRota(){
-    float rota;
-    sqrt()
-}
-
-  
-
 // Vetores globais
 Veiculo veiculos[MAX_VEICULOS];
 int qtdVeiculos = 0;
@@ -150,12 +145,24 @@ int qtdLocais = 0;
 Pedido pedidos[MAX_PEDIDOS];
 int qtdPedidos=0;
 
+float Rota(){
+    float saida[2]= locais[0];
+    float chegada[2] = pedidos[0];
+    int tamanho = sizeof(locais) / sizeof(locais[0]);
+    for(int i = 0 ; i < tamanho; i++){
+        for (int j = 0; j < tamanho ; j++){
+            float dist = sqrt(pow(locais[i].getx() - pedidos[j].getx(), 2) + pow(locais[i].gety()- pedidos[j].gety(), 2));
+            
+        }        
+        } 
+    
+    }
+
+
 // Protótipos
 void menu();
 
 int main() {
-    setlocale(LC_ALL, "pt_BR.UTF-8");
-
     int opcao;
 
     do {
@@ -263,6 +270,9 @@ int main() {
                     p.setnome(nomeLocal);
                     p.setx(x);
                     p.sety(y);
+                    Local l(nomeLocal, x, y);
+                    locais[qtdLocais++] = l;
+                    
                     p.setcargap(cargap);
 
                     pedidos[qtdPedidos++] = p;
@@ -290,8 +300,14 @@ int main() {
     break;
 
             case 7:
-                // calcularRota();
-                break;
+            {
+                 vector<float> distancias = Rota();
+                cout << "Distâncias calculadas (ordem crescente):\n";
+                for (float d : distancias) {
+                    cout << d << "\n";
+                }
+                    break;
+            }
             case 8:
                 // backupDados();
                 break;
