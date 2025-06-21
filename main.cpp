@@ -52,18 +52,6 @@ class Veiculo {
     }
 };
 
-
-struct Pedido {
-    int id;
-    int origem;
-    int destino;
-    float peso;
-};
-
-// Vetores globais
-/*Local locais[MAX_LOCAIS];
-int qtdLocais = 0;*/
-
 Veiculo veiculos[MAX_VEICULOS];
 int qtdVeiculos = 0;
 
