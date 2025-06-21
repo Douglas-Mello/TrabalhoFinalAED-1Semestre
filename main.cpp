@@ -27,7 +27,23 @@ class Veiculo {
     void setplaca(const char p[]){
          strncpy(placa, p, sizeof(placa));
           placa[sizeof(placa) - 1] = '\0'; // Garante q a ultima casa seja um \0, fim de string
+    }
+};
 
+class Local {
+private:
+    char nome[100];
+    float x, y;
+
+public:
+    char* getnome() { return nome; }
+    float getx() { return x; }
+    float gety() { return y; }
+
+    void setnome(const char n[]) {
+        // Copia no máximo 99 caracteres, e garante o '\0' final
+        strncpy(nome, n, sizeof(nome) - 1);
+        nome[sizeof(nome) - 1] = '\0';
     }
     void setmodelo(const char m[]){
         strncpy(modelo, m, sizeof(modelo));
