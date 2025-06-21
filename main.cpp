@@ -11,29 +11,46 @@ using namespace std;
 #define MAX_PEDIDOS 100
 
 // Structs básicas
-class Local {
-private:
-    char nome[100];
-    float x, y;
-};
+class Veiculo {
+    private:
+        char placa[10];
+        char modelo[50];
+        int carga; 
+        int indiceLocalAtual;
+    public:
+        Veiculo() {
+            carga = 0;
+            placa[0] = '\0';
+            modelo[0] = '\0';
+            indiceLocalAtual = -1;
+        }
+    void setplaca(const char p[]){
+         strncpy(placa, p, sizeof(placa));
+          placa[sizeof(placa) - 1] = '\0'; // Garante q a ultima casa seja um \0, fim de string
 
-struct Veiculo {
-    char placa[10];
-    char modelo[50];
-    int status; // 0 = disponível, 1 = ocupado
-    int indiceLocalAtual;
+    }
+    void setmodelo(const char m[]){
+        strncpy(modelo, m, sizeof(modelo));
+        modelo[sizeof(modelo) - 1] = '\0';
+    }
+    void setcarga(const int c){
+        carga = c;
+    }
+    
+    // Método para exibir os dados (só pra teste)
+    const char* getplaca() const{
+        return placa;
+    }
+    const char* getmodelo() const{
+        return modelo;
+    }
+    int getcarga () const{
+        return carga;
+    }
+    int getlocalAtual() const{
+        return indiceLocalAtual;
+    }
 };
-
-struct Pedido {
-    int id;
-    int origem;
-    int destino;
-    float peso;
-};
-
-// Vetores globais
-Local locais[MAX_LOCAIS];
-int qtdLocais = 0;
 
 Veiculo veiculos[MAX_VEICULOS];
 int qtdVeiculos = 0;
@@ -48,6 +65,7 @@ int main() {
     setlocale(LC_ALL, "pt_BR.UTF-8");
     Veiculo v;
     int opcao;
+
     do {
         menu();
         cout << "Escolha uma opcao: ";
@@ -55,38 +73,11 @@ int main() {
 
         switch (opcao) {
             case 1:
-                if (qtdLocais < MAX_LOCAIS) {
-                    char nome[100];
-                    float x, y;
-
-                    cout << "Digite o nome do local: ";
-                    cin.ignore(); // limpar o buffer antes de getline
-                    cin.getline(nome, sizeof(nome));
-
-                    cout << "Digite a coordenada do local (x): ";
-                    cin >> x;
-
-                    cout << "Digite a coordenada do local (y): ";
-                    cin >> y;
-
-                    Local l(nome, x, y);
-                    locais[qtdLocais++] = l;
-                    cout << "Local cadastrado com sucesso!\n";
-                } else {
-                    cout << "Limite de locais atingido.\n";
-                }
+                // cadastrarLocal();
                 break;
-
             case 2:
-                cout << "Mostrando locais cadastrados\n";
-                for (int i = 0; i < qtdLocais; i++) {
-                    cout << "Nome: " << locais[i].getnome() << "\n";
-                    cout << "X: " << locais[i].getx() << "\n";
-                    cout << "Y: " << locais[i].gety() << "\n";
-                    cout << "--------------------------------------------------------------------\n";
-                }
+                // listarLocais();
                 break;
-
             case 3:
                 // cadastrarVeiculo();
                 if (qtdVeiculos < MAX_VEICULOS) {
