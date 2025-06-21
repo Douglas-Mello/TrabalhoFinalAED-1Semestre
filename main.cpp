@@ -6,46 +6,52 @@
 using namespace std;
 
 // Constantes
-//#define MAX_LOCAIS 100
+#define MAX_LOCAIS 100
 #define MAX_VEICULOS 100
 #define MAX_PEDIDOS 100
 
 // Structs básicas
 class Veiculo {
-    private:
-        char placa[10];
-        char modelo[50];
-        int carga; 
-        int indiceLocalAtual;
-    public:
-        Veiculo() {
-            carga = 0;
-            placa[0] = '\0';
-            modelo[0] = '\0';
-            indiceLocalAtual = -1;
-        }
-    void setplaca(const char p[]){
-         strncpy(placa, p, sizeof(placa));
-          placa[sizeof(placa) - 1] = '\0'; // Garante q a ultima casa seja um \0, fim de string
+private:
+    char placa[10];
+    char modelo[50];
+    int carga; 
+    int indiceLocalAtual;
+public:
+    Veiculo() {
+        carga = 0;
+        placa[0] = '\0';
+        modelo[0] = '\0';
+        indiceLocalAtual = -1;
     }
-    void setcarga(const int c){
-        carga = c;
+
+    void setplaca(const char p[]) {
+        strncpy(placa, p, sizeof(placa));
+        placa[sizeof(placa) - 1] = '\0';
     }
-       void setmodelo(const char m[]){
+
+    void setmodelo(const char m[]) {
         strncpy(modelo, m, sizeof(modelo));
         modelo[sizeof(modelo) - 1] = '\0';
     }
-      
-    const char* getplaca() const{
+
+    void setcarga(const int c) {
+        carga = c;
+    }
+
+    const char* getplaca() const {
         return placa;
     }
-    const char* getmodelo() const{
+
+    const char* getmodelo() const {
         return modelo;
     }
-    int getcarga () const{
+
+    int getcarga() const {
         return carga;
     }
-    int getlocalAtual() const{
+
+    int getlocalAtual() const {
         return indiceLocalAtual;
     }
 };
@@ -54,58 +60,65 @@ class Local {
 private:
     char nome[100];
     float x, y;
-
 public:
-    char* getnome() { return nome; }
-    float getx() { return x; }
-    float gety() { return y; }
-
-    void setnome(const char n[]) {
-        // Copia no máximo 99 caracteres, e garante o '\0' final
-        strncpy(nome, n, sizeof(nome) - 1);
-        nome[sizeof(nome) - 1] = '\0';
-    }
- 
-      void setx(float x) {
-        this->x = x;
+    Local() {
+        nome[0] = '\0';
+        x = 0;
+        y = 0;
     }
 
-    void sety(float y) {
-        this->y = y;
-    }
     Local(const char n[], float x, float y) {
         setnome(n);
         setx(x);
         sety(y);
     }
 
-    Local() {
-        nome[0] = '\0';
-        x = 0;
-        y = 0;
+    void setnome(const char n[]) {
+        strncpy(nome, n, sizeof(nome) - 1);
+        nome[sizeof(nome) - 1] = '\0';
     }
-};   
 
+    void setx(float x) {
+        this->x = x;
+    }
 
+    void sety(float y) {
+        this->y = y;
+    }
 
+    char* getnome() {
+        return nome;
+    }
+
+    float getx() {
+        return x;
+    }
+
+    float gety() {
+        return y;
+    }
+};
+
+// Vetores globais
 Veiculo veiculos[MAX_VEICULOS];
 int qtdVeiculos = 0;
 
-Pedido pedidos[MAX_PEDIDOS];
-int qtdPedidos = 0;
+Local locais[MAX_LOCAIS];
+int qtdLocais = 0;
 
-// Protótipos (a serem implementados aos poucos)
+// Protótipos
 void menu();
 
 int main() {
     setlocale(LC_ALL, "pt_BR.UTF-8");
-    Veiculo v;
+
     int opcao;
 
     do {
         menu();
         cout << "Escolha uma opcao: ";
         cin >> opcao;
+        cin.ignore(); // <-- ajuste principal: IGNORA o '\n' logo após ler a opção
 
         switch (opcao) {
             case 1:
@@ -114,14 +127,13 @@ int main() {
                     float x, y;
 
                     cout << "Digite o nome do local: ";
-                    cin.ignore(); // limpar o buffer antes de getline
                     cin.getline(nome, sizeof(nome));
 
                     cout << "Digite a coordenada do local (x): ";
                     cin >> x;
-
                     cout << "Digite a coordenada do local (y): ";
                     cin >> y;
+                    cin.ignore(); // limpa o buffer antes de voltar pro menu
 
                     Local l(nome, x, y);
                     locais[qtdLocais++] = l;
@@ -140,8 +152,8 @@ int main() {
                     cout << "--------------------------------------------------------------------\n";
                 }
                 break;
+
             case 3:
-                // cadastrarVeiculo();
                 if (qtdVeiculos < MAX_VEICULOS) {
                     Veiculo v;
                     char placa[20];
@@ -149,7 +161,6 @@ int main() {
                     int carga;
 
                     cout << "Digite a placa do veiculo: ";
-                    cin.ignore(); // para limpar o buffer antes de getline
                     cin.getline(placa, sizeof(placa));
 
                     cout << "Digite o modelo do veiculo: ";
@@ -157,33 +168,29 @@ int main() {
 
                     cout << "Digite a carga do veiculo: ";
                     cin >> carga;
+                    cin.ignore(); // limpa antes de voltar ao menu
 
                     v.setplaca(placa);
                     v.setmodelo(modelo);
                     v.setcarga(carga);
 
                     veiculos[qtdVeiculos++] = v;
-                    cout << "Veiculo cadastrado com sucesso!\n";
-                    break;
-             
+                    cout << "Veículo cadastrado com sucesso!\n";
                 } else {
-                    cout << "Limite de veiculos atingido.\n";
-                    break;
-                }
-                
-            
-              
-           case 4:
-                // listarVeiculos();
-                    
-                cout << "Mosntrando veiculos cadastrados" << "\n";
-                for(int i=0; i<qtdVeiculos;i++){
-                cout << "Placa: " << veiculos[i].getplaca() << "\n";
-                cout << "Modelo: " << veiculos[i].getmodelo() << "\n";
-                cout << "Carga: " << veiculos[i].getcarga() << "\n";
-                cout << "--------------------------------------------------------------------" << "\n";
+                    cout << "Limite de veículos atingido.\n";
                 }
                 break;
+
+            case 4:
+                cout << "Mostrando veículos cadastrados\n";
+                for (int i = 0; i < qtdVeiculos; i++) {
+                    cout << "Placa: " << veiculos[i].getplaca() << "\n";
+                    cout << "Modelo: " << veiculos[i].getmodelo() << "\n";
+                    cout << "Carga: " << veiculos[i].getcarga() << "\n";
+                    cout << "--------------------------------------------------------------------\n";
+                }
+                break;
+
             case 5:
                 // cadastrarPedido();
                 break;
@@ -222,7 +229,5 @@ void menu() {
     cout << "7. Calcular Rota\n";
     cout << "8. Backup de Dados\n";
     cout << "9. Restaurar Dados\n";
-   
+    cout << "0. Sair\n";
 }
-
-
