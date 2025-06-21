@@ -35,6 +35,19 @@ class Veiculo {
         strncpy(modelo, m, sizeof(modelo));
         modelo[sizeof(modelo) - 1] = '\0';
     }
+      
+    const char* getplaca() const{
+        return placa;
+    }
+    const char* getmodelo() const{
+        return modelo;
+    }
+    int getcarga () const{
+        return carga;
+    }
+    int getlocalAtual() const{
+        return indiceLocalAtual;
+    }
 };
 
 class Local {
@@ -72,20 +85,8 @@ public:
         y = 0;
     }
 };   
-  
-    const char* getplaca() const{
-        return placa;
-    }
-    const char* getmodelo() const{
-        return modelo;
-    }
-    int getcarga () const{
-        return carga;
-    }
-    int getlocalAtual() const{
-        return indiceLocalAtual;
-    }
-};
+
+
 
 Veiculo veiculos[MAX_VEICULOS];
 int qtdVeiculos = 0;
@@ -108,10 +109,36 @@ int main() {
 
         switch (opcao) {
             case 1:
-                // cadastrarLocal();
+                if (qtdLocais < MAX_LOCAIS) {
+                    char nome[100];
+                    float x, y;
+
+                    cout << "Digite o nome do local: ";
+                    cin.ignore(); // limpar o buffer antes de getline
+                    cin.getline(nome, sizeof(nome));
+
+                    cout << "Digite a coordenada do local (x): ";
+                    cin >> x;
+
+                    cout << "Digite a coordenada do local (y): ";
+                    cin >> y;
+
+                    Local l(nome, x, y);
+                    locais[qtdLocais++] = l;
+                    cout << "Local cadastrado com sucesso!\n";
+                } else {
+                    cout << "Limite de locais atingido.\n";
+                }
                 break;
+
             case 2:
-                // listarLocais();
+                cout << "Mostrando locais cadastrados\n";
+                for (int i = 0; i < qtdLocais; i++) {
+                    cout << "Nome: " << locais[i].getnome() << "\n";
+                    cout << "X: " << locais[i].getx() << "\n";
+                    cout << "Y: " << locais[i].gety() << "\n";
+                    cout << "--------------------------------------------------------------------\n";
+                }
                 break;
             case 3:
                 // cadastrarVeiculo();
