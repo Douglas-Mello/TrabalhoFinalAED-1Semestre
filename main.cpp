@@ -28,6 +28,13 @@ class Veiculo {
          strncpy(placa, p, sizeof(placa));
           placa[sizeof(placa) - 1] = '\0'; // Garante q a ultima casa seja um \0, fim de string
     }
+    void setcarga(const int c){
+        carga = c;
+    }
+       void setmodelo(const char m[]){
+        strncpy(modelo, m, sizeof(modelo));
+        modelo[sizeof(modelo) - 1] = '\0';
+    }
 };
 
 class Local {
@@ -45,15 +52,27 @@ public:
         strncpy(nome, n, sizeof(nome) - 1);
         nome[sizeof(nome) - 1] = '\0';
     }
-    void setmodelo(const char m[]){
-        strncpy(modelo, m, sizeof(modelo));
-        modelo[sizeof(modelo) - 1] = '\0';
+ 
+      void setx(float x) {
+        this->x = x;
     }
-    void setcarga(const int c){
-        carga = c;
+
+    void sety(float y) {
+        this->y = y;
     }
-    
-    // Método para exibir os dados (só pra teste)
+    Local(const char n[], float x, float y) {
+        setnome(n);
+        setx(x);
+        sety(y);
+    }
+
+    Local() {
+        nome[0] = '\0';
+        x = 0;
+        y = 0;
+    }
+};   
+  
     const char* getplaca() const{
         return placa;
     }
