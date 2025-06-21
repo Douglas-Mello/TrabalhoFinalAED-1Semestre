@@ -2,7 +2,7 @@
 #include <cstring>
 #include <cstdlib>
 #include <locale.h>
-
+#include <math.h>
 using namespace std;
 
 // Constantes
@@ -96,9 +96,9 @@ public:
 
     float gety() {
         return y;
-    }
+    }      
+    
 };
-
 // Vetores globais
 Veiculo veiculos[MAX_VEICULOS];
 int qtdVeiculos = 0;
