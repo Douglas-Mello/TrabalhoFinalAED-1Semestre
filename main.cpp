@@ -464,7 +464,7 @@ int main() {
                     cout << "Digite o modelo do veiculo: ";
                     cin.getline(modelo, sizeof(modelo));
 
-                    cout << "Digite a carga do veiculo: ";
+                    cout << "Digite a carga suportada pelo veiculo: ";
                     cin >> carga;
                     cin.ignore(); // limpa antes de voltar ao menu
 
