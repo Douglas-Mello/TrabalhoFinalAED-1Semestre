@@ -11,8 +11,8 @@ using namespace std;
 #define MAX_PEDIDOS 100
 
 // Structs básicas
-
-struct Local {
+class Local {
+private:
     char nome[100];
     float x, y;
 };
