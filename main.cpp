@@ -98,6 +98,43 @@ public:
         return y;
     }
 };
+class Pedido : public Local {
+private:
+    int codigo;
+    int cargap; // SOMENTE a carga do veículo, não o veículo inteiro
+public:
+    Pedido() {
+        codigo = 0;
+        cargap = 0;
+    }
+
+    Pedido(int cod, const char nome[], float x, float y, int c) {
+        setcodigo(cod);
+        setnome(nome);
+        setx(x);
+        sety(y);
+        setcargap(c);
+    }
+
+    void setcodigo(int c) {
+        codigo = c;
+    }
+
+    int getcodigo() const {
+        return codigo;
+    }
+
+    void setcargap(int c) {
+        cargap = c;
+    }
+
+    int getcargap() const {
+        return cargap;
+    }
+};
+
+         
+
 
 // Vetores globais
 Veiculo veiculos[MAX_VEICULOS];
@@ -105,6 +142,9 @@ int qtdVeiculos = 0;
 
 Local locais[MAX_LOCAIS];
 int qtdLocais = 0;
+
+Pedido pedidos[MAX_PEDIDOS];
+int qtdPedidos=0;
 
 // Protótipos
 void menu();
@@ -192,11 +232,59 @@ int main() {
                 break;
 
             case 5:
-                // cadastrarPedido();
-                break;
+                if (qtdPedidos < MAX_PEDIDOS) {
+                    Pedido p;
+                    int codigo;
+                    char nomeLocal[100];
+                    float x, y;
+                    int cargap;
+
+                    cout << "Digite o código do pedido: ";
+                    cin >> codigo;
+                    cin.ignore();
+
+                    cout << "Digite o nome do local de entrega: ";
+                    cin.getline(nomeLocal, sizeof(nomeLocal));
+                    cout << "Digite a coordenada X do local: ";
+                    cin >> x;
+                    cout << "Digite a coordenada Y do local: ";
+                    cin >> y;
+
+                    cout << "Digite a carga do pedido: ";
+                    cin >> cargap;
+                    cin.ignore();
+
+                    // Preencher os dados
+                    p.setcodigo(codigo);
+                    p.setnome(nomeLocal);
+                    p.setx(x);
+                    p.sety(y);
+                    p.setcargap(cargap);
+
+                    pedidos[qtdPedidos++] = p;
+
+                    cout << "Pedido cadastrado com sucesso!\n";
+                } else {
+                    cout << "Limite de pedidos atingido.\n";
+                }
+    break;
+
             case 6:
-                // listarPedidos();
-                break;
+                if (qtdPedidos == 0) {
+                    cout << "Nenhum pedido cadastrado ainda.\n";
+                } else {
+                    cout << "Lista de Pedidos:\n";
+                    for (int i = 0; i < qtdPedidos; i++) {
+                        cout << "Código do Pedido: " << pedidos[i].getcodigo() << "\n";
+                        cout << "Local: " << pedidos[i].getnome() << "\n";
+                        cout << "Coordenada X: " << pedidos[i].getx() << "\n";
+                        cout << "Coordenada Y: " << pedidos[i].gety() << "\n";
+                        cout << "Carga: " << pedidos[i].getcargap() << "\n";
+                        cout << "--------------------------------------------------\n";
+                    }
+                }
+    break;
+
             case 7:
                 // calcularRota();
                 break;
