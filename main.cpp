@@ -28,6 +28,7 @@ class Veiculo {
          strncpy(placa, p, sizeof(placa));
           placa[sizeof(placa) - 1] = '\0'; // Garante q a ultima casa seja um \0, fim de string
 
+<<<<<<< Updated upstream
     }
     void setmodelo(const char m[]){
         strncpy(modelo, m, sizeof(modelo));
@@ -52,6 +53,14 @@ class Veiculo {
     }
 };
 
+=======
+
+
+// Vetores globais
+Local locais[MAX_LOCAIS];
+int qtdLocais = 0;
+
+>>>>>>> Stashed changes
 Veiculo veiculos[MAX_VEICULOS];
 int qtdVeiculos = 0;
 
