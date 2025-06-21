@@ -133,6 +133,10 @@ public:
         return cargap;
     }
 };
+float calcularRota(){
+    float rota;
+    sqrt()
+}
 
   
 
