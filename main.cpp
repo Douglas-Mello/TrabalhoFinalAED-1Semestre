@@ -11,7 +11,7 @@ using namespace std;
 #define MAX_VEICULOS 100
 #define MAX_PEDIDOS 100
 
-// Structs básicas
+// Structs basicas
 class Veiculo {
 private:
     char placa[10];
@@ -103,7 +103,7 @@ public:
 class Pedido : public Local {
 private:
     int codigo;
-    int cargap; // SOMENTE a carga do veículo, não o veículo inteiro
+    int cargap; // SOMENTE a carga do veiculo, nao o veiculo inteiro
 public:
     Pedido() {
         codigo = 0;
@@ -145,21 +145,44 @@ int qtdLocais = 0;
 Pedido pedidos[MAX_PEDIDOS];
 int qtdPedidos=0;
 
-float Rota(){
-    float saida[2]= locais[0];
-    float chegada[2] = pedidos[0];
-    int tamanho = sizeof(locais) / sizeof(locais[0]);
-    for(int i = 0 ; i < tamanho; i++){
-        for (int j = 0; j < tamanho ; j++){
-            float dist = sqrt(pow(locais[i].getx() - pedidos[j].getx(), 2) + pow(locais[i].gety()- pedidos[j].gety(), 2));
-            
-        }        
-        } 
-    
+void rota(){
+    float saidax;
+    float saiday;
+    float chegadax;
+    float chegaday;
+    int indiceLocal = -1, indicePedido = -1;
+    float soma, res = INFINITY ;
+    for(int i = 0 ; i < qtdLocais; i++){
+        for (int j = 0; j < qtdPedidos ; j++){
+            soma = sqrt(pow(locais[i].getx() - pedidos[j].getx(), 2) + pow(locais[i].gety()- pedidos[j].gety(), 2));
+            if(soma < res){
+                res = soma;
+                saidax = locais[i].getx();
+                saiday = locais[i].gety();
+                chegadax = pedidos[j].getx();
+                chegaday = pedidos[j].gety();
+                indiceLocal = i;
+                indicePedido = j;
+            }
+        }
     }
+           
+    cout << "\n== Melhor rota encontrada ==\n";
+    cout << "Distancia: " << res << endl;
 
+    if (indiceLocal != -1 && indicePedido != -1) {
+        cout << "Saida: " << locais[indiceLocal].getnome() 
+             << " (X: " << saidax << ", Y: " << saiday << ")" << endl;
+        cout << "Chegada: " << pedidos[indicePedido].getnome() 
+             << " (X: " << chegadax << ", Y: " << chegaday << ")" << endl;
+    } else {
+        cout << "Nenhuma rota encontrada.\n";
+    }
+}
 
-// Protótipos
+    
+
+// Prototipos
 void menu();
 
 int main() {
@@ -169,7 +192,7 @@ int main() {
         menu();
         cout << "Escolha uma opcao: ";
         cin >> opcao;
-        cin.ignore(); // <-- ajuste principal: IGNORA o '\n' logo após ler a opção
+        cin.ignore(); // <-- ajuste principal: IGNORA o '\n' logo apos ler a opcao
 
         switch (opcao) {
             case 1:
@@ -226,14 +249,14 @@ int main() {
                     v.setcarga(carga);
 
                     veiculos[qtdVeiculos++] = v;
-                    cout << "Veículo cadastrado com sucesso!\n";
+                    cout << "Veiculo cadastrado com sucesso!\n";
                 } else {
-                    cout << "Limite de veículos atingido.\n";
+                    cout << "Limite de veiculos atingido.\n";
                 }
                 break;
 
             case 4:
-                cout << "Mostrando veículos cadastrados\n";
+                cout << "Mostrando veiculos cadastrados\n";
                 for (int i = 0; i < qtdVeiculos; i++) {
                     cout << "Placa: " << veiculos[i].getplaca() << "\n";
                     cout << "Modelo: " << veiculos[i].getmodelo() << "\n";
@@ -250,7 +273,7 @@ int main() {
                     float x, y;
                     int cargap;
 
-                    cout << "Digite o código do pedido: ";
+                    cout << "Digite o codigo do pedido: ";
                     cin >> codigo;
                     cin.ignore();
 
@@ -270,18 +293,19 @@ int main() {
                     p.setnome(nomeLocal);
                     p.setx(x);
                     p.sety(y);
-                    Local l(nomeLocal, x, y);
-                    locais[qtdLocais++] = l;
+                    
                     
                     p.setcargap(cargap);
 
                     pedidos[qtdPedidos++] = p;
 
                     cout << "Pedido cadastrado com sucesso!\n";
+                    break;
                 } else {
                     cout << "Limite de pedidos atingido.\n";
+                    break;
                 }
-    break;
+    
 
             case 6:
                 if (qtdPedidos == 0) {
@@ -289,7 +313,7 @@ int main() {
                 } else {
                     cout << "Lista de Pedidos:\n";
                     for (int i = 0; i < qtdPedidos; i++) {
-                        cout << "Código do Pedido: " << pedidos[i].getcodigo() << "\n";
+                        cout << "Codigo do Pedido: " << pedidos[i].getcodigo() << "\n";
                         cout << "Local: " << pedidos[i].getnome() << "\n";
                         cout << "Coordenada X: " << pedidos[i].getx() << "\n";
                         cout << "Coordenada Y: " << pedidos[i].gety() << "\n";
@@ -297,15 +321,11 @@ int main() {
                         cout << "--------------------------------------------------\n";
                     }
                 }
-    break;
+        break;
 
             case 7:
             {
-                 vector<float> distancias = Rota();
-                cout << "Distâncias calculadas (ordem crescente):\n";
-                for (float d : distancias) {
-                    cout << d << "\n";
-                }
+                rota();
                     break;
             }
             case 8:
@@ -314,6 +334,9 @@ int main() {
             case 9:
                 // restaurarDados();
                 break;
+            case 10:
+                cout <<"Atualização do pedido" << endl;
+                Attpedido();
             case 0:
                 cout << "Saindo...\n";
                 break;
