@@ -104,10 +104,12 @@ class Pedido : public Local {
 private:
     int codigo;
     int cargap; // SOMENTE a carga do veiculo, nao o veiculo inteiro
+    bool entregue;
 public:
     Pedido() {
         codigo = 0;
         cargap = 0;
+        entregue = false; 
     }
 
     Pedido(int cod, const char nome[], float x, float y, int c) {
@@ -116,6 +118,7 @@ public:
         setx(x);
         sety(y);
         setcargap(c);
+        entregue = false;
     }
     
 
@@ -134,6 +137,8 @@ public:
     int getcargap() const {
         return cargap;
     }
+    void setEntregue(bool status) { entregue = status; }   
+    bool isEntregue() const { return entregue; } 
 };
 // Vetores globais
 Veiculo veiculos[MAX_VEICULOS];
@@ -145,7 +150,10 @@ int qtdLocais = 0;
 Pedido pedidos[MAX_PEDIDOS];
 int qtdPedidos=0;
 
+int Rotaativa = -1;
+
 void rota(){
+    
     float saidax;
     float saiday;
     float chegadax;
@@ -154,6 +162,7 @@ void rota(){
     float soma, res = INFINITY ;
     for(int i = 0 ; i < qtdLocais; i++){
         for (int j = 0; j < qtdPedidos ; j++){
+            if (pedidos[j].isEntregue()) continue;
             soma = sqrt(pow(locais[i].getx() - pedidos[j].getx(), 2) + pow(locais[i].gety()- pedidos[j].gety(), 2));
             if(soma < res){
                 res = soma;
@@ -175,14 +184,33 @@ void rota(){
              << " (X: " << saidax << ", Y: " << saiday << ")" << endl;
         cout << "Chegada: " << pedidos[indicePedido].getnome() 
              << " (X: " << chegadax << ", Y: " << chegaday << ")" << endl;
+             Rotaativa = indicePedido;
     } else {
         cout << "Nenhuma rota encontrada.\n";
     }
 }
+void attpedido(){
+     if (Rotaativa == -1) {
+        cout << "Nenhuma rota ativa para atualizar.\n";
+        return;
+    }
+    int opc;
+    do {
+        cout << "[1] Concluir rota atual\n";
+        cout << "[2] Retornar a ultima rota (desconcluir)\n";
+        cin >> opc;
+    } while (opc != 1 && opc != 2);
 
-    
-
-// Prototipos
+    if(opc == 1){
+        pedidos[Rotaativa].setEntregue(true);   // marca como entregue
+        cout << "Pedido " << pedidos[Rotaativa].getnome() << " marcado como entregue.\n";
+        Rotaativa = -1;  // nenhuma rota ativa pois foi concluída
+    }
+    else if(opc == 2){
+        pedidos[Rotaativa].setEntregue(false); //desmarca entrega
+        cout << "Pedido " << pedidos[Rotaativa].getnome() << " marcado como pendente.\n";
+    }
+}
 void menu();
 
 int main() {
@@ -336,7 +364,7 @@ int main() {
                 break;
             case 10:
                 cout <<"Atualização do pedido" << endl;
-                Attpedido();
+                attpedido();
             case 0:
                 cout << "Saindo...\n";
                 break;
