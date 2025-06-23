@@ -363,7 +363,7 @@ int main() {
                 // restaurarDados();
                 break;
             case 10:
-                cout <<"Atualização do pedido" << endl;
+                cout <<"Atualizacao do pedido" << endl;
                 attpedido();
             case 0:
                 cout << "Saindo...\n";
@@ -388,5 +388,6 @@ void menu() {
     cout << "7. Calcular Rota\n";
     cout << "8. Backup de Dados\n";
     cout << "9. Restaurar Dados\n";
+    cout << "10. Atualizar situação do pedido\n";
     cout << "0. Sair\n";
 }
