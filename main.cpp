@@ -87,15 +87,14 @@ void attpedido(){
 float peso_caminhao(){
     float cargac,soma;
     cargac=0;
-    soma=cargac+Pedido().getcargap();
     for(int i=0;i<qtdVeiculos;i++){
-        if(soma<=veiculos[i].getcarga()){
-            cargac=soma;
-        }cargac=Veiculo().getcarga();
-
+        while(cargac!=veiculos[i].getcarga()){
+            soma=cargac+Pedido().getcargap();
+            if(soma==veiculos[i].getcarga()){
+                cargac=soma;
+            }
+        }
     }
-
-
 }
 
 void menu();
