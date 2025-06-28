@@ -267,8 +267,8 @@ int main() {
 
 void menu() {
     cout << "\n====== Sistema de Logistica de Entrega (SLEM) ======\n";
-    cout << "1. Cadastrar Local\n";
-    cout << "2. Listar Locais\n";
+    cout << "1. Cadastrar Distribuidora\n";
+    cout << "2. Listar Distribuidora\n";
     cout << "3. Cadastrar Veiculo\n";
     cout << "4. Listar Veiculos\n";
     cout << "5. Cadastrar Pedido\n";
