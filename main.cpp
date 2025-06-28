@@ -27,43 +27,41 @@ int qtdPedidos=0;
 
 int Rotaativa = -1;
 
-void rota(){
+class Rota {
+public:
+    Local* saida;
+    Pedido* chegada;
+    float distancia;
 
-    float saidax;
-    float saiday;
-    float chegadax;
-    float chegaday;
-    int indiceLocal = -1, indicePedido = -1;
-    float soma, res = INFINITY ;
-    for(int i = 0 ; i < qtdLocais; i++){
-        for (int j = 0; j < qtdPedidos ; j++){
-            if (pedidos[j].isEntregue()) continue;
-            soma = sqrt(pow(locais[i].getx() - pedidos[j].getx(), 2) + pow(locais[i].gety()- pedidos[j].gety(), 2));
-            if(soma < res){
-                res = soma;
-                saidax = locais[i].getx();
-                saiday = locais[i].gety();
-                chegadax = pedidos[j].getx();
-                chegaday = pedidos[j].gety();
-                indiceLocal = i;
-                indicePedido = j;
-            }
+    Rota() : saida(nullptr), chegada(nullptr), distancia(999999.0f) {}
+
+    float calcularDistancia(Local* l, Pedido* p) {
+        float dx = l->getx() - p->getx();
+        float dy = l->gety() - p->gety();
+        return sqrt(dx * dx + dy * dy);
+    }
+
+    void tentarAtualizar(Local* l, Pedido* p) {
+        float d = calcularDistancia(l, p);
+        if (d < distancia) {
+            distancia = d;
+            saida = l;
+            chegada = p;
         }
     }
 
-    cout << "\n== Melhor rota encontrada ==\n";
-    cout << "Distancia: " << res << endl;
-
-    if (indiceLocal != -1 && indicePedido != -1) {
-        cout << "Saida: " << locais[indiceLocal].getnome()
-             << " (X: " << saidax << ", Y: " << saiday << ")" << endl;
-        cout << "Chegada: " << pedidos[indicePedido].getnome()
-             << " (X: " << chegadax << ", Y: " << chegaday << ")" << endl;
-             Rotaativa = indicePedido;
-    } else {
-        cout << "Nenhuma rota encontrada.\n";
+    void mostrar() {
+        cout << "\n== Melhor rota encontrada ==\n";
+        if (saida && chegada) {
+            cout << "Distancia: " << distancia << "\n";
+            cout << "Saida: " << saida->getnome() << " (X: " << saida->getx() << ", Y: " << saida->gety() << ")\n";
+            cout << "Chegada: " << chegada->getnome() << " (X: " << chegada->getx() << ", Y: " << chegada->gety() << ")\n";
+        } else {
+            cout << "Nenhuma rota encontrada.\n";
+        }
     }
-}
+};
+
 void attpedido(){
      if (Rotaativa == -1) {
         cout << "Nenhuma rota ativa para atualizar.\n";
@@ -242,7 +240,8 @@ int main() {
 
             case 7:
             {
-                rota();
+                Rota r;
+                r.mostrar();
                     break;
             }
             case 8:
@@ -277,6 +276,6 @@ void menu() {
     cout << "7. Calcular Rota\n";
     cout << "8. Backup de Dados\n";
     cout << "9. Restaurar Dados\n";
-    cout << "10. Atualizar situa��o do pedido\n";
+    cout << "10. Atualizar situacao do pedido\n";
     cout << "0. Sair\n";
 }
