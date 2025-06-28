@@ -4,6 +4,10 @@
 #include <algorithm>
 #include <math.h>
 #include <vector>
+
+#include "Veiculo.h"
+#include "Local.h"
+#include "Pedido.h"
 using namespace std;
 
 // Constantes
@@ -12,134 +16,9 @@ using namespace std;
 #define MAX_PEDIDOS 100
 
 // Structs basicas
-class Veiculo {
-private:
-    char placa[10];
-    char modelo[50];
-    int carga; 
-    int indiceLocalAtual;
-public:
-    Veiculo() {
-        carga = 0;
-        placa[0] = '\0';
-        modelo[0] = '\0';
-        indiceLocalAtual = -1;
-    }
 
-    void setplaca(const char p[]) {
-        strncpy(placa, p, sizeof(placa));
-        placa[sizeof(placa) - 1] = '\0';
-    }
 
-    void setmodelo(const char m[]) {
-        strncpy(modelo, m, sizeof(modelo));
-        modelo[sizeof(modelo) - 1] = '\0';
-    }
 
-    void setcarga(const int c) {
-        carga = c;
-    }
-
-    const char* getplaca() const {
-        return placa;
-    }
-
-    const char* getmodelo() const {
-        return modelo;
-    }
-
-    int getcarga() const {
-        return carga;
-    }
-
-    int getlocalAtual() const {
-        return indiceLocalAtual;
-    }
-};
-
-class Local {
-private:
-    char nome[100];
-    float x, y;
-public:
-    Local() {
-        nome[0] = '\0';
-        x = 0;
-        y = 0;
-    }
-
-    Local(const char n[], float x, float y) {
-        setnome(n);
-        setx(x);
-        sety(y);
-    }
-
-    void setnome(const char n[]) {
-        strncpy(nome, n, sizeof(nome) - 1);
-        nome[sizeof(nome) - 1] = '\0';
-    }
-
-    void setx(float x) {
-        this->x = x;
-    }
-
-    void sety(float y) {
-        this->y = y;
-    }
-
-    char* getnome() {
-        return nome;
-    }
-
-    float getx() {
-        return x;
-    }
-
-    float gety() {
-        return y;
-    
-    }
-};
-class Pedido : public Local {
-private:
-    int codigo;
-    int cargap; // SOMENTE a carga do veiculo, nao o veiculo inteiro
-    bool entregue;
-public:
-    Pedido() {
-        codigo = 0;
-        cargap = 0;
-        entregue = false; 
-    }
-
-    Pedido(int cod, const char nome[], float x, float y, int c) {
-        setcodigo(cod);
-        setnome(nome);
-        setx(x);
-        sety(y);
-        setcargap(c);
-        entregue = false;
-    }
-    
-
-    void setcodigo(int c) {
-        codigo = c;
-    }
-
-    int getcodigo() const {
-        return codigo;
-    }
-
-    void setcargap(int c) {
-        cargap = c;
-    }
-
-    int getcargap() const {
-        return cargap;
-    }
-    void setEntregue(bool status) { entregue = status; }   
-    bool isEntregue() const { return entregue; } 
-};
 // Vetores globais
 Veiculo veiculos[MAX_VEICULOS];
 int qtdVeiculos = 0;
@@ -153,7 +32,7 @@ int qtdPedidos=0;
 int Rotaativa = -1;
 
 void rota(){
-    
+
     float saidax;
     float saiday;
     float chegadax;
@@ -175,14 +54,14 @@ void rota(){
             }
         }
     }
-           
+
     cout << "\n== Melhor rota encontrada ==\n";
     cout << "Distancia: " << res << endl;
 
     if (indiceLocal != -1 && indicePedido != -1) {
-        cout << "Saida: " << locais[indiceLocal].getnome() 
+        cout << "Saida: " << locais[indiceLocal].getnome()
              << " (X: " << saidax << ", Y: " << saiday << ")" << endl;
-        cout << "Chegada: " << pedidos[indicePedido].getnome() 
+        cout << "Chegada: " << pedidos[indicePedido].getnome()
              << " (X: " << chegadax << ", Y: " << chegaday << ")" << endl;
              Rotaativa = indicePedido;
     } else {
@@ -204,13 +83,27 @@ void attpedido(){
     if(opc == 1){
         pedidos[Rotaativa].setEntregue(true);   // marca como entregue
         cout << "Pedido " << pedidos[Rotaativa].getnome() << " marcado como entregue.\n";
-        Rotaativa = -1;  // nenhuma rota ativa pois foi concluída
+        Rotaativa = -1;  // nenhuma rota ativa pois foi conclu�da
     }
     else if(opc == 2){
         pedidos[Rotaativa].setEntregue(false); //desmarca entrega
         cout << "Pedido " << pedidos[Rotaativa].getnome() << " marcado como pendente.\n";
     }
 }
+float peso_caminhao(){
+    float cargac,soma;
+    cargac=0;
+    soma=cargac+Pedido().getcargap();
+    for(int i=0;i<qtdVeiculos;i++){
+        if(soma<=veiculos[i].getcarga()){
+            cargac=soma;
+        }cargac=Veiculo().getcarga();
+
+    }
+
+
+}
+
 void menu();
 
 int main() {
@@ -321,8 +214,8 @@ int main() {
                     p.setnome(nomeLocal);
                     p.setx(x);
                     p.sety(y);
-                    
-                    
+
+
                     p.setcargap(cargap);
 
                     pedidos[qtdPedidos++] = p;
@@ -333,7 +226,7 @@ int main() {
                     cout << "Limite de pedidos atingido.\n";
                     break;
                 }
-    
+
 
             case 6:
                 if (qtdPedidos == 0) {
@@ -388,6 +281,6 @@ void menu() {
     cout << "7. Calcular Rota\n";
     cout << "8. Backup de Dados\n";
     cout << "9. Restaurar Dados\n";
-    cout << "10. Atualizar situação do pedido\n";
+    cout << "10. Atualizar situa��o do pedido\n";
     cout << "0. Sair\n";
 }
