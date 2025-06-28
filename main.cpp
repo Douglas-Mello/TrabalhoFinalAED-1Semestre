@@ -15,10 +15,6 @@ using namespace std;
 #define MAX_VEICULOS 100
 #define MAX_PEDIDOS 100
 
-// Structs basicas
-
-
-
 // Vetores globais
 Veiculo veiculos[MAX_VEICULOS];
 int qtdVeiculos = 0;
