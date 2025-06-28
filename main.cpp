@@ -273,7 +273,7 @@ void menu() {
     cout << "4. Listar Veiculos\n";
     cout << "5. Cadastrar Pedido\n";
     cout << "6. Listar Pedidos\n";
-    cout << "7. Calcular Rota\n";
+    cout << "7. Calcular Rota// calcular capacidade caminhao\n";
     cout << "8. Backup de Dados\n";
     cout << "9. Restaurar Dados\n";
     cout << "10. Atualizar situacao do pedido\n";
