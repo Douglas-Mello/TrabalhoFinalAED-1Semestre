@@ -84,19 +84,19 @@ void attpedido(){
         cout << "Pedido " << pedidos[Rotaativa].getnome() << " marcado como pendente.\n";
     }
 }
-float peso_caminhao(){
+void peso_caminhao(){
     float cargac,soma;
     cargac=0;
-    soma=cargac+Pedido().getcargap();
     for(int i=0;i<qtdVeiculos;i++){
-        if(soma<=veiculos[i].getcarga()){
-            cargac=soma;
-        }cargac=Veiculo().getcarga();
-
+        while(cargac!=veiculos[i].getcarga()){
+            soma=cargac+Pedido().getcargap();
+            if(soma==veiculos[i].getcarga()||(soma>=900 && soma<=1000)){
+                cargac=soma;
+            }
+        }
+        veiculos[i].setcarga(cargac);
     }
-
-
-}
+} 
 
 void menu();
 
@@ -242,6 +242,7 @@ int main() {
             {
                 Rota r;
                 r.mostrar();
+                peso_caminhao();
                     break;
             }
             case 8:
