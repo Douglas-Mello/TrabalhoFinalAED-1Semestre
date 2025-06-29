@@ -77,6 +77,83 @@ public:
         return indicePedido;
     }
 };
+void editarPedido() {
+    if (qtdPedidos == 0) {
+        cout << "Nenhum pedido cadastrado.\n";
+        return;
+    }
+
+    int codigo;
+    cout << "Digite o código do pedido que deseja editar: ";
+    cin >> codigo;
+    cin.ignore();
+
+    bool encontrado = false;
+    for (int i = 0; i < qtdPedidos; i++) {
+        if (pedidos[i].getcodigo() == codigo) {
+            encontrado = true;
+            char nome[100];
+            float x, y;
+            int carga;
+
+            cout << "Novo nome do local: ";
+            cin.getline(nome, sizeof(nome));
+            cout << "Nova coordenada X: ";
+            cin >> x;
+            cout << "Nova coordenada Y: ";
+            cin >> y;
+            cout << "Nova carga: ";
+            cin >> carga;
+            cin.ignore();
+
+            pedidos[i].setnome(nome);
+            pedidos[i].setx(x);
+            pedidos[i].sety(y);
+            pedidos[i].setcargap(carga);
+
+            cout << "Pedido atualizado com sucesso.\n";
+            break;
+        }
+    }
+
+    if (!encontrado) {
+        cout << "Pedido com código " << codigo << " não encontrado.\n";
+    }
+}
+
+void removerPedido() {
+    if (qtdPedidos == 0) {
+        cout << "Nenhum pedido cadastrado.\n";
+        return;
+    }
+
+    int codigo;
+    cout << "Digite o código do pedido que deseja remover: ";
+    cin >> codigo;
+    cin.ignore();
+
+    int indice = -1;
+    for (int i = 0; i < qtdPedidos; i++) {
+        if (pedidos[i].getcodigo() == codigo) {
+            indice = i;
+            break;
+        }
+    }
+
+    if (indice == -1) {
+        cout << "Pedido com código " << codigo << " não encontrado.\n";
+        return;
+    }
+
+    // "Empurra" os pedidos seguintes pra frente
+    for (int i = indice; i < qtdPedidos - 1; i++) {
+        pedidos[i] = pedidos[i + 1];
+    }
+
+    qtdPedidos--; // reduz a quantidade total
+    cout << "Pedido removido com sucesso.\n";
+}
+
 
 void caminhao_pd() {
     float limiteCargaMinima;
@@ -202,6 +279,8 @@ void menu() {
     cout << "8. Backup de Dados\n";
     cout << "9. Restaurar Dados\n";
     cout << "10. Atualizar situacao do pedido\n";
+    cout << "11. Editar Pedido\n";
+    cout << "12. Remover Pedido\n";
     cout << "0. Sair\n";
 }
 
@@ -360,6 +439,13 @@ int main() {
             case 10:
                 cout << "Atualizacao do pedido:\n";
                 attpedido();
+                break;
+            case 11:
+                editarPedido();
+                break;
+
+            case 12:
+                removerPedido();
                 break;
 
             case 0:
