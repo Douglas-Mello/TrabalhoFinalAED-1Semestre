@@ -1,11 +1,7 @@
 #include <iostream>
 #include <cstring>
-#include <cstdlib>
-#include <algorithm>
 #include <math.h>
-#include <vector>
 #include <fstream>
-
 #include "Veiculo.h"
 #include "Local.h"
 #include "Pedido.h"
@@ -68,8 +64,8 @@ public:
         cout << "\n------------------\n";
         cout << "== Melhor rota encontrada ==\n";
         if (saida && chegada) {
-            cout << "Distancia: " << distancia << endl;
-            cout << "Saida: " << saida->getnome() << " (X: " << saida->getx() << ", Y: " << saida->gety() << ")\n";
+            cout << "Distância: " << distancia << endl;
+            cout << "Saída: " << saida->getnome() << " (X: " << saida->getx() << ", Y: " << saida->gety() << ")\n";
             cout << "Chegada: " << chegada->getnome() << " (X: " << chegada->getx() << ", Y: " << chegada->gety() << ")\n";
         } else {
             cout << "Nenhuma rota encontrada.\n";
@@ -142,59 +138,26 @@ void backupDados() {
     ofstream arqVei("veiculos.bin", ios::binary);
     ofstream arqPed("pedidos.bin", ios::binary);
 
-    // Salvar quantidade para facilitar a leitura depois
-    arqLoc.write((char*)&qtdLocais, sizeof(qtdLocais));
-    for (int i = 0; i < qtdLocais; i++) {
-        // Grava nome fixo 100 chars
-        char nome[100];
-        strncpy(nome, locais[i].getnome(), 100);
-        arqLoc.write(nome, sizeof(nome));
-        float x = locais[i].getx();
-        float y = locais[i].gety();
-        arqLoc.write((char*)&x, sizeof(x));
-        arqLoc.write((char*)&y, sizeof(y));
+    if (!arqLoc || !arqVei || !arqPed) {
+        cout << "Erro ao abrir arquivos de backup!\n";
+        return;
     }
 
-    arqVei.write((char*)&qtdVeiculos, sizeof(qtdVeiculos));
-    for (int i = 0; i < qtdVeiculos; i++) {
-        char placa[20];
-        char modelo[50];
-        strncpy(placa, veiculos[i].getplaca(), 20);
-        strncpy(modelo, veiculos[i].getmodelo(), 50);
-        arqVei.write(placa, sizeof(placa));
-        arqVei.write(modelo, sizeof(modelo));
-        float carga = veiculos[i].getcarga();
-        float x = veiculos[i].getxc();
-        float y = veiculos[i].getyc();
-        arqVei.write((char*)&carga, sizeof(carga));
-        arqVei.write((char*)&x, sizeof(x));
-        arqVei.write((char*)&y, sizeof(y));
-    }
+    arqLoc.write((char*)&qtdLocais, sizeof(int));
+    arqLoc.write((char*)locais, sizeof(Local) * qtdLocais);
 
-    arqPed.write((char*)&qtdPedidos, sizeof(qtdPedidos));
-    for (int i = 0; i < qtdPedidos; i++) {
-        int codigo = pedidos[i].getcodigo();
-        char nome[100];
-        strncpy(nome, pedidos[i].getnome(), 100);
-        float x = pedidos[i].getx();
-        float y = pedidos[i].gety();
-        int cargap = pedidos[i].getcargap();
-        bool entregue = pedidos[i].isEntregue();
+    arqVei.write((char*)&qtdVeiculos, sizeof(int));
+    arqVei.write((char*)veiculos, sizeof(Veiculo) * qtdVeiculos);
 
-        arqPed.write((char*)&codigo, sizeof(codigo));
-        arqPed.write(nome, sizeof(nome));
-        arqPed.write((char*)&x, sizeof(x));
-        arqPed.write((char*)&y, sizeof(y));
-        arqPed.write((char*)&cargap, sizeof(cargap));
-        arqPed.write((char*)&entregue, sizeof(entregue));
-    }
+    arqPed.write((char*)&qtdPedidos, sizeof(int));
+    arqPed.write((char*)pedidos, sizeof(Pedido) * qtdPedidos);
 
     arqLoc.close();
     arqVei.close();
     arqPed.close();
 
     cout << "------------------\n";
-    cout << "Backup binário realizado com sucesso!\n";
+    cout << "Backup BINARIO realizado com sucesso!\n";
     cout << "------------------\n";
 }
 
@@ -204,70 +167,28 @@ void restaurarDados() {
     ifstream arqPed("pedidos.bin", ios::binary);
 
     if (!arqLoc || !arqVei || !arqPed) {
-        cout << "Arquivos binários de backup não encontrados.\n";
+        cout << "Erro ao abrir arquivos de restauração!\n";
         return;
     }
 
-    arqLoc.read((char*)&qtdLocais, sizeof(qtdLocais));
-    for (int i = 0; i < qtdLocais; i++) {
-        char nome[100];
-        float x, y;
-        arqLoc.read(nome, sizeof(nome));
-        arqLoc.read((char*)&x, sizeof(x));
-        arqLoc.read((char*)&y, sizeof(y));
-        Local l(nome, x, y);
-        locais[i] = l;
-    }
+    arqLoc.read((char*)&qtdLocais, sizeof(int));
+    arqLoc.read((char*)locais, sizeof(Local) * qtdLocais);
 
-    arqVei.read((char*)&qtdVeiculos, sizeof(qtdVeiculos));
-    for (int i = 0; i < qtdVeiculos; i++) {
-        char placa[20], modelo[50];
-        float carga, x, y;
-        arqVei.read(placa, sizeof(placa));
-        arqVei.read(modelo, sizeof(modelo));
-        arqVei.read((char*)&carga, sizeof(carga));
-        arqVei.read((char*)&x, sizeof(x));
-        arqVei.read((char*)&y, sizeof(y));
-        Veiculo v;
-        v.setplaca(placa);
-        v.setmodelo(modelo);
-        v.setcarga(carga);
-        v.setlocalC(x, y);
-        veiculos[i] = v;
-    }
+    arqVei.read((char*)&qtdVeiculos, sizeof(int));
+    arqVei.read((char*)veiculos, sizeof(Veiculo) * qtdVeiculos);
 
-    arqPed.read((char*)&qtdPedidos, sizeof(qtdPedidos));
-    for (int i = 0; i < qtdPedidos; i++) {
-        int codigo, cargap;
-        char nome[100];
-        float x, y;
-        bool entregue;
-
-        arqPed.read((char*)&codigo, sizeof(codigo));
-        arqPed.read(nome, sizeof(nome));
-        arqPed.read((char*)&x, sizeof(x));
-        arqPed.read((char*)&y, sizeof(y));
-        arqPed.read((char*)&cargap, sizeof(cargap));
-        arqPed.read((char*)&entregue, sizeof(entregue));
-
-        Pedido p;
-        p.setcodigo(codigo);
-        p.setnome(nome);
-        p.setx(x);
-        p.sety(y);
-        p.setcargap(cargap);
-        p.setEntregue(entregue);
-        pedidos[i] = p;
-    }
+    arqPed.read((char*)&qtdPedidos, sizeof(int));
+    arqPed.read((char*)pedidos, sizeof(Pedido) * qtdPedidos);
 
     arqLoc.close();
     arqVei.close();
     arqPed.close();
 
     cout << "------------------\n";
-    cout << "Dados restaurados do backup  com sucesso!\n";
+    cout << "Dados BINARIOS restaurados com sucesso!\n";
     cout << "------------------\n";
 }
+
 
 void menu() {
     cout << "\n====== Sistema de Logistica de Entrega (SLEM) ======\n";
