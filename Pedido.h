@@ -1,17 +1,31 @@
 #ifndef HEADER_BA466E0D74729ACC
 #define HEADER_BA466E0D74729ACC
-class Pedido : public Local {
+#include <cstring>
+class Pedido  {
 private:
     int codigo;
-    int cargap; // SOMENTE a carga do veiculo, nao o veiculo inteiro
+    int cargap; 
     bool entregue;
+    int x,y;
+    char nome[50];
 public:
     Pedido() {
         codigo = 0;
         cargap = 0;
         entregue = false;
     }
+void setnome(const char n[]) {
+        strncpy(nome, n, sizeof(nome) - 1);
+        nome[sizeof(nome) - 1] = '\0';
+    }
 
+    void setx(float x) {
+        this->x = x;
+    }
+
+    void sety(float y) {
+        this->y = y;
+    }
     Pedido(int cod, const char nome[], float x, float y, int c) {
         setcodigo(cod);
         setnome(nome);
@@ -36,6 +50,16 @@ public:
 
     int getcargap() const {
         return cargap;
+    }
+    float getx() {
+        return x;
+    }
+    char* getnome() {
+        return nome;
+    }
+    float gety() {
+        return y;
+
     }
     void setEntregue(bool status) { entregue = status; }
     bool isEntregue() const { return entregue; }
