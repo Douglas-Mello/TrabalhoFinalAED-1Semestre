@@ -1,5 +1,6 @@
 #ifndef HEADER_52458137291F9A67
 #define HEADER_52458137291F9A67
+#include<cstring>
 class Local {
 private:
     char nome[100];

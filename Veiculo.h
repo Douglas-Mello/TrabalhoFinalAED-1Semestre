@@ -6,12 +6,16 @@ private:
     char modelo[50];
     int carga;
     int indiceLocalAtual;
+    int xc;
+    int yc;
 public:
     Veiculo() {
         carga = 0;
         placa[0] = '\0';
         modelo[0] = '\0';
         indiceLocalAtual = -1;
+        xc = 0;
+        yc=0;
     }
 
     void setplaca(const char p[]) {
@@ -26,6 +30,10 @@ public:
 
     void setcarga(const int c) {
         carga = c;
+    }
+    void setlocalC(const int x, int y) {
+        xc = x;
+        yc = y;
     }
 
     const char* getplaca() const {
@@ -43,6 +51,13 @@ public:
     int getlocalAtual() const {
         return indiceLocalAtual;
     }
+    int getxc(){
+        return xc;
+    }
+    int getyc(){
+        return yc;
+    }
+    
 };
 
 #endif // header guard
