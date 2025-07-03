@@ -1,21 +1,21 @@
 #ifndef HEADER_48D71CB534F5C71
 #define HEADER_48D71CB534F5C71
+
+#include "Local.h"
+
 class Veiculo {
 private:
     char placa[10];
     char modelo[50];
     int carga;
-    int indiceLocalAtual;
-    int xc;
-    int yc;
+    int indiceLocalAtual; // índice no vetor de locais
+
 public:
     Veiculo() {
         carga = 0;
         placa[0] = '\0';
         modelo[0] = '\0';
         indiceLocalAtual = -1;
-        xc = 0;
-        yc=0;
     }
 
     void setplaca(const char p[]) {
@@ -31,9 +31,9 @@ public:
     void setcarga(const int c) {
         carga = c;
     }
-    void setlocalC(const int x, int y) {
-        xc = x;
-        yc = y;
+
+    void setIndiceLocal(int indice) {
+        indiceLocalAtual = indice;
     }
 
     const char* getplaca() const {
@@ -51,14 +51,6 @@ public:
     int getlocalAtual() const {
         return indiceLocalAtual;
     }
-    int getxc(){
-        return xc;
-    }
-    int getyc(){
-        return yc;
-    }
-    
 };
 
-#endif // header guard
-
+#endif // HEADER_48D71CB534F5C71
