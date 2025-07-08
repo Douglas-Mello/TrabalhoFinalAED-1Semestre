@@ -64,8 +64,8 @@ public:
         cout << "\n------------------\n";
         cout << "== Melhor rota encontrada ==\n";
         if (saida && chegada) {
-            cout << "Distância: " << distancia << endl;
-            cout << "Saída: " << saida->getnome() << " (X: " << saida->getx() << ", Y: " << saida->gety() << ")\n";
+            cout << "Dist\u00e2ncia: " << distancia << endl;
+            cout << "Sa\u00edda: " << saida->getnome() << " (X: " << saida->getx() << ", Y: " << saida->gety() << ")\n";
             cout << "Chegada: " << chegada->getnome() << " (X: " << chegada->getx() << ", Y: " << chegada->gety() << ")\n";
         } else {
             cout << "Nenhuma rota encontrada.\n";
@@ -77,6 +77,7 @@ public:
         return indicePedido;
     }
 };
+
 void editarPedido() {
     if (qtdPedidos == 0) {
         cout << "Nenhum pedido cadastrado.\n";
@@ -145,28 +146,185 @@ void removerPedido() {
         return;
     }
 
-    // "Empurra" os pedidos seguintes pra frente
     for (int i = indice; i < qtdPedidos - 1; i++) {
         pedidos[i] = pedidos[i + 1];
     }
 
-    qtdPedidos--; // reduz a quantidade total
+    qtdPedidos--;
     cout << "Pedido removido com sucesso.\n";
 }
 
+void editarVeiculo() {
+    if (qtdVeiculos == 0) {
+        cout << "Nenhum veiculo cadastrado.\n";
+        return;
+    }
+
+    char placa[20];
+    cout << "Digite a placa do veiculo que deseja editar: ";
+    cin.ignore();  // Limpa buffer para getline funcionar corretamente
+    cin.getline(placa, sizeof(placa));
+
+    bool encontrado = false;
+    for (int i = 0; i < qtdVeiculos; i++) {
+        if (strcmp(veiculos[i].getplaca(), placa) == 0) {
+            encontrado = true;
+            char novoModelo[50];
+            int novaCarga, indiceLocal;
+
+            cout << "Novo modelo: ";
+            cin.getline(novoModelo, sizeof(novoModelo));
+            cout << "Nova carga: ";
+            cin >> novaCarga;
+
+            if (qtdLocais == 0) {
+                cout << "Nenhum local cadastrado! Cadastre um local primeiro.\n";
+                return;
+            }
+
+            cout << "Locais disponiveis:\n";
+            for (int j = 0; j < qtdLocais; j++) {
+                cout << "[" << j << "] " << locais[j].getnome()
+                     << " (X: " << locais[j].getx() << ", Y: " << locais[j].gety() << ")\n";
+            }
+
+            cout << "Escolha o índice do local atual do veiculo: ";
+            cin >> indiceLocal;
+            cin.ignore();
+
+            if (indiceLocal < 0 || indiceLocal >= qtdLocais) {
+                cout << "Índice inválido.\n";
+                return;
+            }
+
+            veiculos[i].setmodelo(novoModelo);
+            veiculos[i].setcarga(novaCarga);
+            veiculos[i].setIndiceLocal(indiceLocal);
+
+            cout << "Veiculo atualizado com sucesso.\n";
+            break;
+        }
+    }
+
+    if (!encontrado) {
+        cout << "Veiculo com placa " << placa << " nao encontrado.\n";
+    }
+}
+
+
+void removerVeiculo() {
+    if (qtdVeiculos == 0) {
+        cout << "Nenhum veiculo cadastrado.\n";
+        return;
+    }
+
+    char placa[20];
+    cout << "Digite a placa do veiculo que deseja remover: ";
+    cin.getline(placa, sizeof(placa));
+
+    int indice = -1;
+    for (int i = 0; i < qtdVeiculos; i++) {
+        if (strcmp(veiculos[i].getplaca(), placa) == 0) {
+            indice = i;
+            break;
+        }
+    }
+
+    if (indice == -1) {
+        cout << "Veiculo com placa " << placa << " nao encontrado.\n";
+        return;
+    }
+
+    for (int i = indice; i < qtdVeiculos - 1; i++) {
+        veiculos[i] = veiculos[i + 1];
+    }
+
+    qtdVeiculos--;
+    cout << "Veiculo removido com sucesso.\n";
+}
+
+void editarLocal() {
+    if (qtdLocais == 0) {
+        cout << "Nenhum local cadastrado.\n";
+        return;
+    }
+
+    char nome[100];
+    cout << "Digite o nome do local que deseja editar: ";
+    cin.getline(nome, sizeof(nome));
+
+    bool encontrado = false;
+    for (int i = 0; i < qtdLocais; i++) {
+        if (strcmp(locais[i].getnome(), nome) == 0) {
+            encontrado = true;
+            float x, y;
+            char novoNome[100];
+
+            cout << "Novo nome do local: ";
+            cin.getline(novoNome, sizeof(novoNome));
+            cout << "Nova coordenada X: ";
+            cin >> x;
+            cout << "Nova coordenada Y: ";
+            cin >> y;
+            cin.ignore();
+
+            locais[i].setnome(novoNome);
+            locais[i].setx(x);
+            locais[i].sety(y);
+
+            cout << "Local atualizado com sucesso.\n";
+            break;
+        }
+    }
+
+    if (!encontrado) {
+        cout << "Local com nome " << nome << " nao encontrado.\n";
+    }
+}
+
+void removerLocal() {
+    if (qtdLocais == 0) {
+        cout << "Nenhum local cadastrado.\n";
+        return;
+    }
+
+    char nome[100];
+    cout << "Digite o nome do local que deseja remover: ";
+    cin.getline(nome, sizeof(nome));
+
+    int indice = -1;
+    for (int i = 0; i < qtdLocais; i++) {
+        if (strcmp(locais[i].getnome(), nome) == 0) {
+            indice = i;
+            break;
+        }
+    }
+
+    if (indice == -1) {
+        cout << "Local com nome " << nome << " nao encontrado.\n";
+        return;
+    }
+
+    for (int i = indice; i < qtdLocais - 1; i++) {
+        locais[i] = locais[i + 1];
+    }
+
+    qtdLocais--;
+    cout << "Local removido com sucesso.\n";
+}
 
 void caminhao_pd() {
-    float limiteCargaMinima;
+    const float limiteCargaMinimaPercentual = 0.95f;
     bool pedidoAtribuido[MAX_PEDIDOS] = {false};
 
     for (int i = 0; i < qtdVeiculos; i++) {
-        float capacidadeMax = veiculos[i].getcarga();
-        float cargaAtual = 0;
+        int capacidadeMax = veiculos[i].getcarga(); // carga máxima do veículo
+        int cargaAtual = 0;
 
         for (int j = 0; j < qtdPedidos; j++) {
-            if (pedidoAtribuido[j]) continue;
+            if (pedidoAtribuido[j] || pedidos[j].isEntregue()) continue;
 
-            float peso = pedidos[j].getcargap();
+            int peso = pedidos[j].getcargap();
             if (cargaAtual + peso <= capacidadeMax) {
                 cargaAtual += peso;
                 pedidoAtribuido[j] = true;
@@ -174,13 +332,11 @@ void caminhao_pd() {
             }
         }
 
-        veiculos[i].setcarga(cargaAtual);
-        limiteCargaMinima = capacidadeMax * 0.95;
-
+        // Não alterar a carga máxima do veículo, crie variável se quiser armazenar carga atual.
         cout << "Caminhao " << i + 1 << " carregado com " << cargaAtual << " kg de " << capacidadeMax << " kg" << endl;
 
-        if (cargaAtual < limiteCargaMinima) {
-            cout << "O caminhao " << i + 1 << " nao atingiu 95 da capacidade maxima." << endl;
+        if (cargaAtual < capacidadeMax * limiteCargaMinimaPercentual) {
+            cout << "O caminhao " << i + 1 << " nao atingiu 95% da capacidade maxima." << endl;
         }
 
         cout << "------------------\n";
@@ -211,66 +367,65 @@ void attpedido() {
 }
 
 void backupDados() {
-    ofstream arqLoc("locais.bin", ios::binary);
-    ofstream arqVei("veiculos.bin", ios::binary);
-    ofstream arqPed("pedidos.bin", ios::binary);
+    FILE *arqLoc = fopen("locais.bin", "wb");
+    FILE *arqVei = fopen("veiculos.bin", "wb");
+    FILE *arqPed = fopen("pedidos.bin", "wb");
 
     if (!arqLoc || !arqVei || !arqPed) {
-        cout << "Erro ao abrir arquivos de backup!\n";
+        printf("Erro ao abrir arquivos de backup!\n");
         return;
     }
 
-    arqLoc.write((char*)&qtdLocais, sizeof(int));
-    arqLoc.write((char*)locais, sizeof(Local) * qtdLocais);
+    fwrite(&qtdLocais, sizeof(int), 1, arqLoc);
+    fwrite(locais, sizeof(Local), qtdLocais, arqLoc);
 
-    arqVei.write((char*)&qtdVeiculos, sizeof(int));
-    arqVei.write((char*)veiculos, sizeof(Veiculo) * qtdVeiculos);
+    fwrite(&qtdVeiculos, sizeof(int), 1, arqVei);
+    fwrite(veiculos, sizeof(Veiculo), qtdVeiculos, arqVei);
 
-    arqPed.write((char*)&qtdPedidos, sizeof(int));
-    arqPed.write((char*)pedidos, sizeof(Pedido) * qtdPedidos);
+    fwrite(&qtdPedidos, sizeof(int), 1, arqPed);
+    fwrite(pedidos, sizeof(Pedido), qtdPedidos, arqPed);
 
-    arqLoc.close();
-    arqVei.close();
-    arqPed.close();
+    fclose(arqLoc);
+    fclose(arqVei);
+    fclose(arqPed);
 
-    cout << "------------------\n";
-    cout << "Backup BINARIO realizado com sucesso!\n";
-    cout << "------------------\n";
+    printf("------------------\n");
+    printf("Backup BINARIO realizado com sucesso!\n");
+    printf("------------------\n");
 }
 
 void restaurarDados() {
-    ifstream arqLoc("locais.bin", ios::binary);
-    ifstream arqVei("veiculos.bin", ios::binary);
-    ifstream arqPed("pedidos.bin", ios::binary);
+    FILE *arqLoc = fopen("locais.bin", "rb");
+    FILE *arqVei = fopen("veiculos.bin", "rb");
+    FILE *arqPed = fopen("pedidos.bin", "rb");
 
     if (!arqLoc || !arqVei || !arqPed) {
-        cout << "Erro ao abrir arquivos de restauração!\n";
+        printf("Erro ao abrir arquivos de restauração!\n");
         return;
     }
 
-    arqLoc.read((char*)&qtdLocais, sizeof(int));
-    arqLoc.read((char*)locais, sizeof(Local) * qtdLocais);
+    fread(&qtdLocais, sizeof(int), 1, arqLoc);
+    fread(locais, sizeof(Local), qtdLocais, arqLoc);
 
-    arqVei.read((char*)&qtdVeiculos, sizeof(int));
-    arqVei.read((char*)veiculos, sizeof(Veiculo) * qtdVeiculos);
+    fread(&qtdVeiculos, sizeof(int), 1, arqVei);
+    fread(veiculos, sizeof(Veiculo), qtdVeiculos, arqVei);
 
-    arqPed.read((char*)&qtdPedidos, sizeof(int));
-    arqPed.read((char*)pedidos, sizeof(Pedido) * qtdPedidos);
+    fread(&qtdPedidos, sizeof(int), 1, arqPed);
+    fread(pedidos, sizeof(Pedido), qtdPedidos, arqPed);
 
-    arqLoc.close();
-    arqVei.close();
-    arqPed.close();
+    fclose(arqLoc);
+    fclose(arqVei);
+    fclose(arqPed);
 
-    cout << "------------------\n";
-    cout << "Dados BINARIOS restaurados com sucesso!\n";
-    cout << "------------------\n";
+    printf("------------------\n");
+    printf("Dados BINARIOS restaurados com sucesso!\n");
+    printf("------------------\n");
 }
-
 
 void menu() {
     cout << "\n====== Sistema de Logistica de Entrega (SLEM) ======\n";
-    cout << "1. Cadastrar Distribuidora\n";
-    cout << "2. Listar Distribuidora\n";
+    cout << "1. Cadastrar Local\n";
+    cout << "2. Listar Local\n";
     cout << "3. Cadastrar Veiculo\n";
     cout << "4. Listar Veiculos\n";
     cout << "5. Cadastrar Pedido\n";
@@ -281,6 +436,10 @@ void menu() {
     cout << "10. Atualizar situacao do pedido\n";
     cout << "11. Editar Pedido\n";
     cout << "12. Remover Pedido\n";
+    cout << "13. Editar Veiculo\n";
+    cout << "14. Remover Veiculo\n";
+    cout << "15. Editar Local\n";
+    cout << "16. Remover Local\n";
     cout << "0. Sair\n";
 }
 
@@ -294,7 +453,7 @@ int main() {
         cin.ignore();
 
         switch (opcao) {
-            case 1:
+            case 1: {
                 if (qtdLocais < MAX_LOCAIS) {
                     char nome[100];
                     float x, y;
@@ -312,6 +471,7 @@ int main() {
                     cout << "Limite de locais atingido.\n";
                 }
                 break;
+            }
 
             case 2:
                 cout << "Mostrando locais cadastrados\n";
@@ -324,25 +484,45 @@ int main() {
                 break;
 
             case 3:
+            {
                 if (qtdVeiculos < MAX_VEICULOS) {
                     Veiculo v;
                     char placa[20], modelo[50];
-                    int carga, x, y;
+                    int carga;
 
                     cout << "Digite a placa do veiculo: ";
+                    cin.ignore(); // limpar buffer antes de getline
                     cin.getline(placa, sizeof(placa));
                     cout << "Digite o modelo do veiculo: ";
                     cin.getline(modelo, sizeof(modelo));
                     cout << "Digite a carga suportada: ";
                     cin >> carga;
-                    cout << "Digite as coordenadas do veiculo (x y): ";
-                    cin >> x >> y;
-                    cin.ignore();
+
+                    if (qtdLocais == 0) {
+                        cout << "Nenhum local cadastrado! Cadastre um local primeiro.\n";
+                        break;
+                    }
+
+                    cout << "Locais disponiveis:\n";
+                    for (int i = 0; i < qtdLocais; i++) {
+                        cout << "[" << i << "] " << locais[i].getnome()
+                            << " (X: " << locais[i].getx() << ", Y: " << locais[i].gety() << ")\n";
+                    }
+
+                    int indiceLocal;
+                    cout << "Escolha o índice do local atual do veiculo: ";
+                    cin >> indiceLocal;
+                    cin.ignore(); // limpar buffer
+
+                    if (indiceLocal < 0 || indiceLocal >= qtdLocais) {
+                        cout << "Índice inválido.\n";
+                        break;
+                    }
 
                     v.setplaca(placa);
                     v.setmodelo(modelo);
                     v.setcarga(carga);
-                    v.setlocalC(x, y);
+                    v.setIndiceLocal(indiceLocal);  // Verifique se esse método está no seu Veiculo.h
 
                     veiculos[qtdVeiculos++] = v;
                     cout << "Veiculo cadastrado com sucesso!\n";
@@ -350,18 +530,28 @@ int main() {
                     cout << "Limite de veiculos atingido.\n";
                 }
                 break;
-
+            }
             case 4:
                 cout << "Mostrando veiculos cadastrados\n";
                 for (int i = 0; i < qtdVeiculos; i++) {
                     cout << "Placa: " << veiculos[i].getplaca() << "\n";
                     cout << "Modelo: " << veiculos[i].getmodelo() << "\n";
                     cout << "Carga: " << veiculos[i].getcarga() << "\n";
+
+                    int idx = veiculos[i].getlocalAtual();
+                    if (idx >= 0 && idx < qtdLocais) {
+                        cout << "Local Atual: " << locais[idx].getnome()
+                            << " (X: " << locais[idx].getx() << ", Y: " << locais[idx].gety() << ")\n";
+                    } else {
+                        cout << "Local Atual: Não definido\n";
+                    }
+
                     cout << "------------------\n";
                 }
                 break;
+            
 
-            case 5:
+            case 5: {
                 if (qtdPedidos < MAX_PEDIDOS) {
                     Pedido p;
                     int codigo;
@@ -403,6 +593,7 @@ int main() {
                     cout << "Limite de pedidos atingido.\n";
                 }
                 break;
+            }
 
             case 6:
                 if (qtdPedidos == 0) {
@@ -440,12 +631,29 @@ int main() {
                 cout << "Atualizacao do pedido:\n";
                 attpedido();
                 break;
+
             case 11:
                 editarPedido();
                 break;
 
             case 12:
                 removerPedido();
+                break;
+
+            case 13:
+                editarVeiculo();
+                break;
+
+            case 14:
+                removerVeiculo();
+                break;
+
+            case 15:
+                editarLocal();
+                break;
+
+            case 16:
+                removerLocal();
                 break;
 
             case 0:
